@@ -1,8 +1,12 @@
 const express = require("express");
-const Task = require("./models")
 const router = express.Router();
+
 const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require("./../swagger.json");
+const swaggerDocument = require("./../swagger.json")
+
+const taskControllers = require("./taskcontrollers")
+const taskMiddelwares = require("./taskmiddelwares")
+
 
 router.use('/api-docs', swaggerUi.serve);
 
@@ -13,46 +17,22 @@ router.get("/", (req, res) => {
     res.send("Bem-vindo a API de tarefas")
 })
 
-router.get("/tasks", async (req, res) => {
-    const task = await Task.find({ })
-    res.status(200).json({ task });
-})
+router.get("/tasks", taskControllers.todasTarefas);
 
-router.get("/tasks/:id", async (req, res) => {
-    const task = await Task.findById(req.params.id);
-    res.status(200).json({ task });
-})
+router.get("/task/:id", taskMiddelwares.checarId, taskControllers.umaTarefa);
 
-router.post("/tasks", async (req, res, next) => {
-    req.Task = new Task
-    next();
-}, saveAndEdit())
+router.post("/task", taskControllers.post_Put("post"));
 
-router.put("/:id", async (req, res, next) => {
-    req.Task = await Task.findById(req.params.id);
-    next()
-}, saveAndEdit());
+router.put("/task/:id", taskControllers.post_Put("put"));
 
-router.delete("/:id", async (req, res, next) => {
-    req.Task = await Task.findByIdAndDelete(req.params.id)
-    res.status(200).send("Tarefa deletada com sucesso")
-})
+router.delete("/:id", taskControllers.apagarTarefa);
 
 
 
-function saveAndEdit() {
-    return async (req, res) => {
-        let Task = req.Task
-        Task.description = req.body.description
-        Task.done = req.body.done
-        try {
-            const saved = Task.save();
-            res.status(200).send("tarefa salvo com sucesso");
-        } catch(err) {
-            res.status(400).send("Opa deu um erro")
-        }
-    }
-}
+
+
+
+
 
 
 module.exports = router;

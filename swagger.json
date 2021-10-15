@@ -1,33 +1,20 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "API rest de tarefas",
+    "description": "Uma simples documentação da nossa API de tarefas",
     "version": "1.0.0",
-    "title": "Super documentação de API",
-    "termsOfService": "http://swagger.io/terms/"
+    "title": "Super API de tarefas",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "email": "dizolele.pedro@gmail.com"
+    }
   },
   "host": "localhost:5000",
   "basePath": "/",
   "tags": [
     {
-      "name": "pet",
-      "description": "Everything about your Pets",
-      "externalDocs": {
-        "description": "Find out more",
-        "url": "http://swagger.io"
-      }
-    },
-    {
-      "name": "store",
-      "description": "Access to Petstore orders"
-    },
-    {
-      "name": "user",
-      "description": "Operations about user",
-      "externalDocs": {
-        "description": "Find out more about our store",
-        "url": "http://swagger.io"
-      }
+      "name": "tasks",
+      "description": "Tudo sobre minhas tarefas"
     }
   ],
   "schemes": [
@@ -37,11 +24,11 @@
     "/tasks": {
       "post": {
         "tags": [
-          "pet"
+          "tasks"
         ],
-        "summary": "Criar uma nova tarefa",
+        "summary": "Adicionar uma nova tarefa",
         "description": "",
-        "operationId": "addPet",
+        "operationId": "addtasks",
         "consumes": [
           "application/json"
         ],
@@ -52,7 +39,7 @@
           {
             "in": "body",
             "name": "body",
-            "description": "Os atributos da nova tarefa",
+            "description": "Atributos da nova tarefa",
             "required": true,
             "schema": {
               "$ref": "#/definitions/Pet"
@@ -60,26 +47,17 @@
           }
         ],
         "responses": {
-          "405": {
-            "description": "Invalid input"
+          "200": {
+            "description": "Tarefa adicionada"
           }
-        },
-        "security": [
-          {
-            "petstore_auth": [
-              "write:pets",
-              "read:pets"
-            ]
-          }
-        ]
+        }
       },
       "get": {
         "tags": [
-          "pet"
+          "tasks"
         ],
         "summary": "Listar todas as tarefas",
         "description": "",
-        "operationId": "updatePet",
         "consumes": [
           "application/json"
         ],
@@ -88,17 +66,9 @@
         ],
         "responses": {
           "200": {
-            "description": "Retorna todas as tarefas"
+            "description": "Listando todas as tarefas"
           }
-        },
-        "security": [
-          {
-            "petstore_auth": [
-              "write:pets",
-              "read:pets"
-            ]
-          }
-        ]
+        }
       }
     },
     "/pet/findByStatus": {
@@ -106,7 +76,7 @@
         "tags": [
           "pet"
         ],
-        "summary": "",
+        "summary": "Listando tarefas por status",
         "description": "Multiple status values can be provided with comma separated strings",
         "operationId": "findPetsByStatus",
         "produces": [
@@ -206,143 +176,70 @@
         "deprecated": true
       }
     },
-    "/pet/{petId}": {
+    "/tasks/:id": {
       "get": {
         "tags": [
-          "pet"
+          "tasks"
         ],
-        "summary": "Find pet by ID",
-        "description": "Returns a single pet",
-        "operationId": "getPetById",
+        "summary": "Listando tarefa pelo Id",
+        "description": "Retorna uma tarefa especifica",
+        "operationId": "getTasksById",
         "produces": [
-          "application/xml",
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Listando a tarefa",
+            "schema": {
+              "$ref": "#/definitions/Pet"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "Atualizando a tarefa",
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
           "application/json"
         ],
         "parameters": [
           {
-            "name": "petId",
-            "in": "path",
-            "description": "ID of pet to return",
+            "in": "body",
+            "name": "body",
+            "description": "Atributos da nova tarefa",
             "required": true,
-            "type": "integer",
-            "format": "int64"
+            "schema": {
+              "$ref": "#/definitions/Pet"
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "successful operation",
-            "schema": {
-              "$ref": "#/definitions/Pet"
-            }
-          },
-          "400": {
-            "description": "Invalid ID supplied"
-          },
-          "404": {
-            "description": "Pet not found"
+            "description": "Tarefa atualizada"
           }
-        },
-        "security": [
-          {
-            "api_key": []
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "pet"
-        ],
-        "summary": "Updates a pet in the store with form data",
-        "description": "",
-        "operationId": "updatePetWithForm",
-        "consumes": [
-          "application/x-www-form-urlencoded"
-        ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "petId",
-            "in": "path",
-            "description": "ID of pet that needs to be updated",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          },
-          {
-            "name": "name",
-            "in": "formData",
-            "description": "Updated name of the pet",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "status",
-            "in": "formData",
-            "description": "Updated status of the pet",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "405": {
-            "description": "Invalid input"
-          }
-        },
-        "security": [
-          {
-            "petstore_auth": [
-              "write:pets",
-              "read:pets"
-            ]
-          }
-        ]
+        }
       },
       "delete": {
         "tags": [
-          "pet"
+          "tasks"
         ],
-        "summary": "Deletes a pet",
+        "summary": "Deletando tarefas",
         "description": "",
         "operationId": "deletePet",
         "produces": [
-          "application/xml",
           "application/json"
         ],
-        "parameters": [
-          {
-            "name": "api_key",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "petId",
-            "in": "path",
-            "description": "Pet id to delete",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
         "responses": {
-          "400": {
-            "description": "Invalid ID supplied"
-          },
-          "404": {
-            "description": "Pet not found"
+          "200": {
+            "description": "tarefa deletada com sucesso"
           }
-        },
-        "security": [
-          {
-            "petstore_auth": [
-              "write:pets",
-              "read:pets"
-            ]
-          }
-        ]
+        }
       }
     },
     "/pet/{petId}/uploadImage": {
@@ -935,18 +832,21 @@
     "Pet": {
       "type": "object",
       "required": [
-        "name",
-        "photoUrls"
+        "description",
+        "done"
       ],
       "properties": {
         "description": {
           "type": "string",
-          "example": "Ola tarefa"
+          "example": "teste de swagger"
         },
         "done": {
           "type": "boolean",
           "example": true
         }
+      },
+      "xml": {
+        "name": "Pet"
       }
     },
     "ApiResponse": {

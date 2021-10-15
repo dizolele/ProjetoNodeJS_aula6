@@ -15,7 +15,7 @@ connectToDataBase();
 app.use(express.json());
 app.use(taskRouter);
 
-const port = 5000
+const port = process.env.serverPort
 
 app.listen(port, () => {
     console.log(`Backend funcionando no http://localhost:${port}`)
